@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yakax.bsbdj.mapper.CommentMapper">
+  <resultMap id="BaseResultMap" type="com.yakax.bsbdj.model.Comment">
+    <id column="comment_id" jdbcType="BIGINT" property="commentId" />
+    <result column="comment_text" jdbcType="VARCHAR" property="commentText" />
+    <result column="uid" jdbcType="BIGINT" property="uid" />
+    <result column="passtime" jdbcType="VARCHAR" property="passtime" />
+    <result column="content_id" jdbcType="BIGINT" property="contentId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    comment_id, comment_text, uid, passtime, content_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from t_comment
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yakax.bsbdj.model.Comment">
+    insert into t_comment (comment_id, comment_text, uid, 
+      passtime, content_id)
+    values (#{commentId,jdbcType=BIGINT}, #{commentText,jdbcType=VARCHAR}, #{uid,jdbcType=BIGINT}, 
+      #{passtime,jdbcType=VARCHAR}, #{contentId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yakax.bsbdj.model.Comment">
+    insert into t_comment
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        comment_id,
+      </if>
+      <if test="commentText != null">
+        comment_text,
+      </if>
+      <if test="uid != null">
+        uid,
+      </if>
+      <if test="passtime != null">
+        passtime,
+      </if>
+      <if test="contentId != null">
+        content_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="commentId != null">
+        #{commentId,jdbcType=BIGINT},
+      </if>
+      <if test="commentText != null">
+        #{commentText,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="passtime != null">
+        #{passtime,jdbcType=VARCHAR},
+      </if>
+      <if test="contentId != null">
+        #{contentId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yakax.bsbdj.model.Comment">
+    update t_comment
+    <set>
+      <if test="commentText != null">
+        comment_text = #{commentText,jdbcType=VARCHAR},
+      </if>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=BIGINT},
+      </if>
+      <if test="passtime != null">
+        passtime = #{passtime,jdbcType=VARCHAR},
+      </if>
+      <if test="contentId != null">
+        content_id = #{contentId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yakax.bsbdj.model.Comment">
+    update t_comment
+    set comment_text = #{commentText,jdbcType=VARCHAR},
+      uid = #{uid,jdbcType=BIGINT},
+      passtime = #{passtime,jdbcType=VARCHAR},
+      content_id = #{contentId,jdbcType=BIGINT}
+    where comment_id = #{commentId,jdbcType=BIGINT}
+  </update>
+</mapper>

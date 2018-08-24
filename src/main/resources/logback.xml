@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="60 seconds" debug="false">
+
+    <property name="componentName" value="bsbdj"/>
+    <property name="dir" value="/bsbdjLogs/"/>
+    <property name="CONSOLE_LOG_PATTERN" value="%date - [%highlight(%-5level)] [%boldGreen(%file：%line)] %msg%n"/>
+    <property name="FILE_LOG_PATTERN" value="%date - [%-5level] [%file：%line] %msg%n"/>
+    <contextName>${componentName}</contextName>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${dir}${componentName}.log</file>
+        <append>true</append>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${dir}${componentName}-%d{yy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+    <!--<logger name="com.yakax.bsbdj.mapper" level="DEBUG"/>-->
+
+    <!--记录系统执行过的sql语句-->
+    <logger name="jdbc.sqlonly" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!--记录sql执行的时间，可以分析耗时的sql语句-->
+    <logger name="jdbc.sqltiming" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!--记录返回结果集信息-->
+    <logger name="jdbc.resultset" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!--执行之后的返回结果-->
+    <logger name="jdbc.resultsettable" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!--记录除了 ResultSet 之外的所有 JDBC 调用信息，会产生大量的记录，有利于调试跟踪具体的 JDBC 问题-->
+    <logger name="jdbc.audit" level="WARN" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <!--记录连接打开、关闭等信息，有利于调试数据库连接相关问题-->
+    <logger name="jdbc.connection" level="INFO" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </logger>
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="FILE"/>
+    </root>
+
+</configuration>

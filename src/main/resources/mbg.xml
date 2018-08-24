@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+<generatorConfiguration>
+    <!--环境配置-->
+    <context id="mycontext" targetRuntime="Mybatis3">
+        <!--是否生成注释-->
+        <commentGenerator>
+            <!--不生成注释 注释不好看-->
+            <property name="suppressAllComments" value="true"/>
+        </commentGenerator>
+        <!--连接那个数据库-->
+        <jdbcConnection driverClass="com.mysql.cj.jdbc.Driver"
+                        connectionURL="jdbc:mysql://192.168.1.190:3306/bsbdj?useSSL=false&amp;serverTimezone=GMT%2b8"
+                        userId="root"
+                        password="156967">
+        </jdbcConnection>
+        <javaTypeResolver>
+            <!--不适用默认设置bigDecimal 所有为true 所有数字类型都会是bigDecimal-->
+            <property name="forceBigDecimals" value="false"/>
+        </javaTypeResolver>
+
+
+        <!--实体类设置 位置-->
+        <javaModelGenerator targetPackage="com.yakax.bsbdj.model" targetProject="D:\bsbdj\src\main\java">
+            <!--根据包名生成对应目录-->
+            <property name="enableSubPackages" value="true"/>
+        </javaModelGenerator>
+        <!--mapper映射文件xml位置-->
+        <sqlMapGenerator targetPackage="mapper" targetProject="D:\bsbdj\src\main\resources">
+            <!--根据包名生成对应目录-->
+            <property name="enableSubPackages" value="true"/>
+        </sqlMapGenerator>
+        <!--设置接口位置-->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.yakax.bsbdj.mapper"
+                             targetProject="D:\bsbdj\src\main\java">
+            <!--根据包名生成对应目录-->
+            <property name="enableSubPackages" value="true"/>
+        </javaClientGenerator>
+
+
+        <!--生成表-->
+        <table tableName="t_content" domainObjectName="Content" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <!--TEXT 数据类型指定string类型-->
+            <columnOverride column="content_text" javaType="java.lang.String" jdbcType="VARCHAR">
+            </columnOverride>
+        </table>
+        <table tableName="t_channel" domainObjectName="Channel" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+        </table>
+        <table tableName="t_comment" domainObjectName="Comment" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <columnOverride column="comment_text" javaType="java.lang.String" jdbcType="VARCHAR">
+            </columnOverride>
+        </table>
+        <table tableName="t_forum" domainObjectName="Forum" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <columnOverride column="info" javaType="java.lang.String" jdbcType="VARCHAR">
+            </columnOverride>
+        </table>
+        <table tableName="t_image" domainObjectName="Image" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <!--设置自动回填id 只适用于自增id-->
+            <generatedKey column="image_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="t_source" domainObjectName="Source" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <generatedKey column="source_id" sqlStatement="MySql" identity="true" type="post"/>
+            <columnOverride column="response_text" javaType="java.lang.String" jdbcType="VARCHAR">
+            </columnOverride>
+        </table>
+        <table tableName="t_video" domainObjectName="Video" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+            <generatedKey column="video_id" sqlStatement="MySql" identity="true" type="post"/>
+        </table>
+        <table tableName="t_user" domainObjectName="User" enableSelectByExample="false"
+               enableDeleteByExample="false" enableCountByExample="false" enableUpdateByExample="false">
+        </table>
+    </context>
+</generatorConfiguration>

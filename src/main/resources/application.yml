@@ -1,0 +1,15 @@
+spring:
+  datasource:
+    driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
+    url: jdbc:log4jdbc:mysql://192.168.1.190:3306/bsbdj?useSSL=false&serverTimezone=GMT%2b8
+    username: root
+    password: 156967
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+
+mybatis:
+  mapper-locations: classpath:/mapper/*.xml
+server:
+  port: 80
+
