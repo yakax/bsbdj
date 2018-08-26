@@ -268,7 +268,7 @@ public class CrawlerService {
             content.setForumId(forum.getForumId());//数据都是先添加在把关联上所以后做更新操作
             contentMapper.updateByPrimaryKey(content);
         }
-        log.info("Content ID:{} ，内容成功导入!", contentId);
+        log.info("Content ID:{} ，内容成功导入", contentId);
 
     }
 }
