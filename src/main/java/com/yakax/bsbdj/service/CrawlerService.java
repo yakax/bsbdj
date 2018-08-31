@@ -23,6 +23,7 @@ import java.util.Map;
 
 @Slf4j
 @Service
+@Transactional
 public class CrawlerService {
     @Resource
     private SourceMapper sourceMapper;
@@ -108,7 +109,6 @@ public class CrawlerService {
 
     }
 
-    @Transactional
     public void etl() {
         List<Source> sourceList = sourceMapper.selectByState("WAITING");
         for (Source source : sourceList) {
@@ -118,14 +118,13 @@ public class CrawlerService {
             //通过ognl 获取健值对里面的list 每个list 有20条记录
             List<Map<String, Object>> listMap = OgnlUtils.getListMap("list", map);
             for (Map<String, Object> stringObjectMap : listMap) {
-                etlInsert(source,stringObjectMap);
+                etlInsert(source, stringObjectMap);
             }
             source.setState("PROCESSED");
             sourceMapper.updateByPrimaryKey(source);
         }
     }
 
-    @Transactional
     public void etlInsert(Source source, Map<String, Object> stringObjectMap) {
         Long contentId = OgnlUtils.getNumber("id", stringObjectMap).longValue();
         //一个内容只允许插入一次，不允许重复
@@ -269,6 +268,5 @@ public class CrawlerService {
             contentMapper.updateByPrimaryKey(content);
         }
         log.info("Content ID:{} ，内容成功导入", contentId);
-
     }
 }

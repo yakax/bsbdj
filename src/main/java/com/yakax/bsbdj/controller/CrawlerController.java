@@ -22,4 +22,10 @@ public class CrawlerController {
     public void crawl() {
         crawlerService.crawlRunner();
     }
+
+    @RequestMapping("etl")
+    @ResponseBody
+    public void etl() {
+        crawlerService.etl();
+    }
 }
