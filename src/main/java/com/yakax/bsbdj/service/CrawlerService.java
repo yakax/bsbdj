@@ -1,5 +1,8 @@
 package com.yakax.bsbdj.service;
 
+import com.github.pagehelper.ISelect;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.yakax.bsbdj.common.OgnlUtils;
@@ -268,5 +271,9 @@ public class CrawlerService {
             contentMapper.updateByPrimaryKey(content);
         }
         log.info("Content ID:{} ，内容成功导入", contentId);
+    }
+
+    public Page<Map> selectAll(Integer page, Integer rows,Map parms) {
+        return PageHelper.startPage(page, rows).doSelectPage(() -> contentMapper.selectAll(parms));
     }
 }
