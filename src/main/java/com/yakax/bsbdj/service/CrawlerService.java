@@ -1,6 +1,5 @@
 package com.yakax.bsbdj.service;
 
-import com.github.pagehelper.ISelect;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.google.gson.Gson;
@@ -12,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
@@ -19,6 +19,8 @@ import org.springframework.util.Assert;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -43,7 +45,7 @@ public class CrawlerService {
     @Resource
     private ForumMapper forumMapper;
 
-    private void crawl(Map context, String template, String np, Integer channelId) {
+    private void crawl(Map<String, Integer> context, String template, String np, Integer channelId) {
         String url = template.replace("{np}", np);
         //创建对象
         OkHttpClient client = new OkHttpClient();
@@ -85,7 +87,7 @@ public class CrawlerService {
         sourceEntity.setState("WAITING");
         sourceMapper.insert(sourceEntity);
         //每次抓取一百条
-        int count = (int) context.get("context");
+        int count = context.get("context");
         count += 20;
         context.put("context", count);
         if (count >= 100)
@@ -273,7 +275,62 @@ public class CrawlerService {
         log.info("Content ID:{} ，内容成功导入", contentId);
     }
 
-    public Page<Map> selectAll(Integer page, Integer rows,Map parms) {
+    public Page<Map> selectAll(Integer page, Integer rows, Map<String, Object> parms) {
         return PageHelper.startPage(page, rows).doSelectPage(() -> contentMapper.selectAll(parms));
+    }
+
+    public int delContent(int contentId) {
+        return contentMapper.deleteByPrimaryKey((long) contentId);
+    }
+
+    public Map<String, Object> getView(Long contentId) {
+        Content content = contentMapper.selectByPrimaryKey(contentId);
+        User user = userMapper.selectByPrimaryKey(content.getUid());
+        Forum forum = null;
+        if (content.getForumId() != null) {
+            forum = forumMapper.selectByPrimaryKey(content.getForumId());
+        }
+        List<Map> commentMap = commentMapper.selectCommentOrUser(contentId);
+        Map<String, Object> viewMap = new HashMap<>();
+        viewMap.put("content", content);
+        viewMap.put("user", user);
+        viewMap.put("commentMap", commentMap);
+        viewMap.put("forum", forum);
+        if (content.getContentType().equals("video")) {
+            viewMap.put("video", videoMapper.selectByContenId(contentId));
+        } else {
+            viewMap.put("image", imageMapper.selectByContenId(contentId));
+        }
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date fmtPasstime = null;
+        try {
+            fmtPasstime = sdf.parse(content.getPasstime());
+        } catch (ParseException e) {
+            ExceptionUtils.getStackTrace(e);
+        }
+        viewMap.put("fmtPassTime", this.convertTimeToFormat(fmtPasstime));
+        return viewMap;
+    }
+
+    public String convertTimeToFormat(Date d) {
+        long curTime = System.currentTimeMillis() / (long) 1000;
+        long timeStamp = d.getTime() / 1000l;
+        long time = curTime - timeStamp;
+
+        if (time < 60 && time >= 0) {
+            return "刚刚";
+        } else if (time >= 60 && time < 3600) {
+            return time / 60 + "分钟前";
+        } else if (time >= 3600 && time < 3600 * 24) {
+            return time / 3600 + "小时前";
+        } else if (time >= 3600 * 24 && time < 3600 * 24 * 30) {
+            return time / 3600 / 24 + "天前";
+        } else if (time >= 3600 * 24 * 30 && time < 3600 * 24 * 30 * 12) {
+            return time / 3600 / 24 / 30 + "个月前";
+        } else if (time >= 3600 * 24 * 30 * 12) {
+            return time / 3600 / 24 / 30 / 12 + "年前";
+        } else {
+            return "刚刚";
+        }
     }
 }

@@ -5,8 +5,11 @@ import com.yakax.bsbdj.model.Res;
 import com.yakax.bsbdj.service.CrawlerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -20,6 +23,7 @@ public class CrawlerController {
 
     @Resource
     private CrawlerService crawlerService;
+
 
     @RequestMapping("/test")
     @ResponseBody
@@ -54,5 +58,22 @@ public class CrawlerController {
         res.setCount((int) mapPage.getTotal());
         res.setData(mapPage.getResult());
         return res;
+    }
+
+    @RequestMapping("/del")
+    @ResponseBody
+    public Res del(int contentId) {
+        Assert.isTrue(crawlerService.delContent(contentId) > 0, "删除失败");
+        Res res = new Res();
+        res.setCode(0);
+        return res;
+    }
+
+    @RequestMapping("/view/{cid}.html")
+    public ModelAndView view(@PathVariable("cid") Long contentId) {
+        Map<String, Object> view = crawlerService.getView(contentId);
+        ModelAndView modelAndView = new ModelAndView("preview");
+        modelAndView.addAllObjects(view);
+        return modelAndView;
     }
 }
