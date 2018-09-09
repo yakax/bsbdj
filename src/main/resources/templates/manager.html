@@ -5,32 +5,11 @@
     <title>百思不得姐管理后台</title>
     <link rel="stylesheet" href="/css/layui.css">
     <script type="text/javascript" src="/layui.js"></script>
-    <script>
-        //layer代表布局组建，element代表常用元素，table表格，form 表单
-        layui.use(["layer", "element", "table", "form"], function () {
-            var $ = layui.$;//jquery模块
-            var table = layui.table;//表格模块
 
-            $("#selectButton").click(function () {
-                var channel = $("#channel").val();
-                var contentType = $("#contentType").val();
-                var keyword = $("#keyword").val();
-                table.reload("test1", {
-                    url:'/crawl/list',
-                    where: {
-                        "channel": channel,
-                        "contentType": contentType,
-                        "keyword": keyword,
-                    }
-                })
-            })
-
-        })
-    </script>
 </head>
 <body>
 <blockquote class="layui-elem-quote">百思不得姐管理后台</blockquote>
-<table class="layui-table" lay-data="{height:'auto', url:'/crawl/list',id:'test1', page:true}"
+<table class="layui-table" lay-data="{width:'auto',url:'/crawl/list',id:'test1', page:true}"
        lay-filter="test">
     <thead>
     <div class="layui-row">
@@ -65,16 +44,61 @@
     </div>
     <tr>
         <th lay-data="{field:'content_id', width:150, sort: true}">ID</th>
-        <th lay-data="{field:'channel_name' , width:150,}">频道</th>
-        <th lay-data="{field:'content_type' , width:150,}">类型</th>
-        <th lay-data="{field:'content_text' , width:150,}">标题/正文</th>
-        <th lay-data="{field:'nickname' , width:150,}">用户</th>
-        <th lay-data="{field:'passtime' , width:150,}">发布时间</th>
-        <th lay-data="{field:'comment_count'  , width:150,}">评论数</th>
-        <th lay-data="{field:'like_count' , width:150,}">点赞</th>
-        <th lay-data="{field:'hate_count' , width:150,}">踩</th>
+        <th lay-data="{field:'channel_name' , width:100,}">频道</th>
+        <th lay-data="{field:'content_type' , width:100,}">类型</th>
+        <th lay-data="{field:'content_text' , width:100,}">标题/正文</th>
+        <th lay-data="{field:'nickname' , width:100,}">用户</th>
+        <th lay-data="{field:'passtime' , width:200,}">发布时间</th>
+        <th lay-data="{field:'comment_count'  , width:100,}">评论数</th>
+        <th lay-data="{field:'like_count' , width:100,}">点赞</th>
+        <th lay-data="{field:'hate_count' , width:100,}">踩</th>
+        <th lay-data="{field:'op' , width:150, templet:'#op'}">操作</th>
     </tr>
     </thead>
 </table>
+<div id="op" style="display:none;">
+    <button class="layui-btn layui-btn-normal layui-btn-xs" lay-event="detail">预览</button>
+    <button class="layui-btn layui-btn-danger layui-btn-xs" lay-event="delete">删除</button>
+</div>
 </body>
+<script>
+    //layer代表布局组建，element代表常用元素，table表格，form 表单
+    layui.use(["layer", "element", "table", "form"], function () {
+        var $ = layui.$;//jquery模块
+        var table = layui.table;//表格模块
+
+        $("#selectButton").click(function () {
+            var channel = $("#channel").val();
+            var contentType = $("#contentType").val();
+            var keyword = $("#keyword").val();
+            table.reload("test1", {
+                url: '/crawl/list',
+                where: {
+                    "channel": channel,
+                    "contentType": contentType,
+                    "keyword": keyword,
+                }
+            })
+        });
+
+        table.on('tool(test)', function (obj) {
+            switch (obj.event) {
+                case 'detail':
+                    location.href = "/crawl/view/" + obj.data.content_id + ".html"
+                    break;
+                case 'delete':
+                    $.post('/crawl/del', {contentId: obj.data.content_id}, function (resp) {
+                        if (resp.code !== -1) {
+                            layer.msg('删除成功！', {icon: 1});
+                            table.reload("test1");
+                        } else {
+                            layer.msg(resp.msg)
+                        }
+                    });
+                    break;
+            }
+            ;
+        });
+    })
+</script>
 </html>
