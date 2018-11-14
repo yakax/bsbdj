@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author yakax
+ */
 @Slf4j
 public class OgnlUtils {
 
@@ -71,7 +74,7 @@ public class OgnlUtils {
                     result = (Boolean) value;
                 } else if (value instanceof String) {
                     //"true"处理这种
-                    result = ((String) value).equalsIgnoreCase("true");
+                    result = "true".equalsIgnoreCase((String) value);
                 } else if (value instanceof Number) {
                     // 1
                     result = ((Number) value).intValue() == 1;
@@ -94,8 +97,9 @@ public class OgnlUtils {
         List<Map<String, Object>> result = null;
         try {
             result = (List<Map<String, Object>>) Ognl.getValue(ognl, root);
-            if (result == null)
+            if (result == null) {
                 result = new ArrayList<>();
+            }
         } catch (OgnlException e) {
             log.error(ExceptionUtils.getStackTrace(e) + "ognl错误List<Map>");
         }

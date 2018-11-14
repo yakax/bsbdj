@@ -48,7 +48,7 @@ public class CrawlerController {
         Map<String, Object> parms = new HashMap<>();
         if (channel != null && channel != -1)
             parms.put("channel", channel);
-        if (contentType != null && !contentType.equals("-1"))
+        if (contentType != null && !"-1".equals(contentType))
             parms.put("contentType", contentType);
         if (keyword != null)
             parms.put("keyword", "%" + keyword + "%");

@@ -1,7 +1,7 @@
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mysql://127.0.0.1:3306/bsbdj?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true #打开自己设置编码集useUnicode不要设置characterEncoding 他不支持utf8mb4
+    url: jdbc:log4jdbc:mysql://192.168.17.129:3306/bsbdj?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true #打开自己设置编码集useUnicode不要设置characterEncoding 他不支持utf8mb4
     username: root
     password: 156967
     hikari:

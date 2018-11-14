@@ -90,8 +90,9 @@ public class CrawlerService {
         int count = context.get("context");
         count += 20;
         context.put("context", count);
-        if (count >= 100)
+        if (count >= 100) {
             return;
+        }
 
         //递归调用
         crawl(context, template, npStr, channelId);
@@ -155,7 +156,7 @@ public class CrawlerService {
         content.setCreateTime(new Date());
         contentMapper.insert(content);
 
-        if (content.getContentType().equals("video")) {
+        if ("video".equals(content.getContentType())) {
             //视频
             Video video = new Video();
             //统一取第一个地址
@@ -174,7 +175,7 @@ public class CrawlerService {
             video.setThumbSmall(thumbSmallUrl.size() > 0 ? thumbSmallUrl.get(0) : null);
             video.setContentId(content.getContentId());
             videoMapper.insert(video);
-        } else if (content.getContentType().equals("image")) {
+        } else if ("image".equals(content.getContentType())) {
             Image image = new Image();
             List<String> bigUrl = OgnlUtils.getListString("image.big", stringObjectMap);
             image.setBigUrl(bigUrl.size() > 0 ? bigUrl.get(0) : null);
@@ -186,7 +187,7 @@ public class CrawlerService {
             image.setThumbUrl(thumbUrl.size() > 0 ? thumbUrl.get(0) : null);
             image.setContentId(content.getContentId());
             imageMapper.insert(image);
-        } else if (content.getContentType().equals("gif")) {
+        } else if ("gif".equals(content.getContentType())) {
             Image gif = new Image();
             List<String> bigUrl = OgnlUtils.getListString("gif.images", stringObjectMap);
             gif.setBigUrl(bigUrl.size() > 0 ? bigUrl.get(0) : null);
@@ -234,7 +235,7 @@ public class CrawlerService {
                 if (user == null) {
                     user = new User();
                     List<String> header = OgnlUtils.getListString("u.header", map);
-                    user.setHeader(header.size() > 0 ? header.get(0) : null);
+                    user.setHeader((header.size() > 0) ? header.get(0) : null);
                     user.setUid(OgnlUtils.getNumber("u.uid", map).longValue());
                     user.setIsVip(OgnlUtils.getBoolean("u.is_vip", map) ? 1 : 0);
                     user.setRoomUrl(OgnlUtils.getString("u.room_url", map));
@@ -269,7 +270,8 @@ public class CrawlerService {
                 forum.setUserCount(OgnlUtils.getNumber("sub_number", tag).intValue());
                 forumMapper.insert(forum);
             }
-            content.setForumId(forum.getForumId());//数据都是先添加在把关联上所以后做更新操作
+            //数据都是先添加在把关联上所以后做更新操作
+            content.setForumId(forum.getForumId());
             contentMapper.updateByPrimaryKey(content);
         }
         log.info("Content ID:{} ，内容成功导入", contentId);
@@ -296,7 +298,7 @@ public class CrawlerService {
         viewMap.put("user", user);
         viewMap.put("commentMap", commentMap);
         viewMap.put("forum", forum);
-        if (content.getContentType().equals("video")) {
+        if ("video".equals(content.getContentType())) {
             viewMap.put("video", videoMapper.selectByContenId(contentId));
         } else {
             viewMap.put("image", imageMapper.selectByContenId(contentId));
@@ -314,7 +316,7 @@ public class CrawlerService {
 
     public String convertTimeToFormat(Date d) {
         long curTime = System.currentTimeMillis() / (long) 1000;
-        long timeStamp = d.getTime() / 1000l;
+        long timeStamp = d.getTime() / 1000L;
         long time = curTime - timeStamp;
 
         if (time < 60 && time >= 0) {

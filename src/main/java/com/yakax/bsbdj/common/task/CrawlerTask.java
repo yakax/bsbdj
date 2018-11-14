@@ -7,6 +7,9 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 
+/**
+ * @author yakax
+ */
 @Slf4j
 @Component
 public class CrawlerTask {
