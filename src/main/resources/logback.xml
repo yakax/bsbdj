@@ -23,14 +23,14 @@
         </encoder>
     </appender>
     <!--<logger name="com.yakax.bsbdj.mapper" level="DEBUG"/>-->
-
+    <!-- additivity=false 表示匹配之后，不再继续传递给其他的logger-->
     <!--记录系统执行过的sql语句-->
     <logger name="jdbc.sqlonly" level="WARN" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </logger>
     <!--记录sql执行的时间，可以分析耗时的sql语句-->
-    <logger name="jdbc.sqltiming" level="INFO" additivity="false">
+    <logger name="jdbc.sqltiming" level="WARN" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </logger>
@@ -50,7 +50,7 @@
         <appender-ref ref="FILE"/>
     </logger>
     <!--记录连接打开、关闭等信息，有利于调试数据库连接相关问题-->
-    <logger name="jdbc.connection" level="INFO" additivity="false">
+    <logger name="jdbc.connection" level="WARN" additivity="false">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </logger>

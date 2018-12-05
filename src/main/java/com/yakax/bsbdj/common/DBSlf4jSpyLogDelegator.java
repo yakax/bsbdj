@@ -1,4 +1,4 @@
-package com.yakax.bsbdj.mapper;
+package com.yakax.bsbdj.common;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.log4jdbc.log.slf4j.Slf4jSpyLogDelegator;
