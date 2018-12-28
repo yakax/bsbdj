@@ -1,9 +1,10 @@
 spring:
   datasource:
     driver-class-name: net.sf.log4jdbc.sql.jdbcapi.DriverSpy
-    url: jdbc:log4jdbc:mysql://167.179.99.104:3306/bsbdj?useSSL=false&serverTimezone=GMT%2b8&useUnicode=true #打开自己设置编码集useUnicode不要设置characterEncoding 他不支持utf8mb4
+#    url: jdbc:log4jdbc:mysql://118.24.114.160:3306/bsbdj?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2b8&useUnicode=true #打开自己设置编码集useUnicode不要设置characterEncoding 他不支持utf8mb4
+    url: jdbc:log4jdbc:mysql://118.24.114.160:3306/bsbdj?useUnicode=true&useSSL=false&allowPublicKeyRetrieval=true
     username: root
-    password: 156967
+    password: password
     hikari:
       maximum-pool-size: 20
       minimum-idle: 5

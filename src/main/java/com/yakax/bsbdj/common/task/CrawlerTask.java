@@ -16,7 +16,7 @@ public class CrawlerTask {
     @Resource
     private CrawlerService crawlerService;
 
-    @Scheduled(cron = "0 0 0/1 * * ? ")
+    @Scheduled(cron = "0 0 0 1/1 * ? ")
     public void crawlerRunner() {
         crawlerService.crawlRunner();//先抓取
         crawlerService.etl();//然后etl 分析存取

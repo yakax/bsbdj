@@ -99,6 +99,7 @@ public class CrawlerService {
     }
 
     public void crawlRunner() {
+        sourceMapper.delAll();
         String[] url = new String[]{
                 "http://c.api.budejie.com/topic/list/jingxuan/1/budejie-android-7.0.2/{np}-20.json?market=tencentyingyongbao&udid=863064010240796&appname=baisibudejie&os=4.4.2&client=android&visiting=&mac=F0%3A79%3A59%3A5D%3AA1%3A75&ver=7.0.2",
                 "http://c.api.budejie.com/topic/list/jingxuan/41/budejie-android-7.0.2/{np}-20.json?market=tencentyingyongbao&udid=863064010240796&appname=baisibudejie&os=4.4.2&client=android&visiting=&mac=F0%3A79%3A59%3A5D%3AA1%3A75&ver=7.0.2",
@@ -126,8 +127,6 @@ public class CrawlerService {
             for (Map<String, Object> stringObjectMap : listMap) {
                 etlInsert(source, stringObjectMap);
             }
-            source.setState("PROCESSED");
-            sourceMapper.updateByPrimaryKey(source);
         }
     }
 
